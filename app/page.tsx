@@ -1,65 +1,286 @@
-import Image from "next/image";
+import { Bell, Search } from "lucide-react";
 
 export default function Home() {
+  const products = [
+    {
+      id: "1",
+      name: "AHA-BHA Clarifying Treatment Toner",
+      brand: "Cosrx",
+      category: "Toner",
+      dateOpened: "2026-03-01",
+      paoMonths: 12,
+      expirationDate: "2027-06-01",
+      volumeLabel: "150ml",
+      notes:
+        "Exfoliating botanical toner. Preps skin for deep hydration. Use with cotton pad.",
+    },
+    {
+      id: "2",
+      name: "Advanced Snail 96 Mucin Power Essence",
+      brand: "Cosrx",
+      category: "Serum",
+      dateOpened: "2026-02-15",
+      paoMonths: 12,
+      expirationDate: "2027-03-30",
+      volumeLabel: "100ml",
+      notes:
+        "Chic skin repair barrier booster. Apply directly to damp skin after toner.",
+    },
+    {
+      id: "3",
+      name: "Glow Serum : Propolis + Niacinamide",
+      brand: "Beauty of Joseon",
+      category: "Serum",
+      dateOpened: "2025-11-20",
+      paoMonths: 9,
+      expirationDate: "2026-08-15",
+      volumeLabel: "30ml",
+      notes:
+        "Vibrant honey-like essence. Keeps skin radiant, honey glow finish.",
+    },
+    {
+      id: "4",
+      name: "Relief Sun : Rice + Probiotics SPF 50+",
+      brand: "Beauty of Joseon",
+      category: "Sunscreen",
+      dateOpened: "2026-05-10",
+      paoMonths: 6,
+      expirationDate: "2027-01-12",
+      volumeLabel: "50ml",
+      notes:
+        "Organic lightweight physical sunscreen. Absolutely zero white cast. Outstanding UV defence.",
+    },
+    {
+      id: "5",
+      name: "Birch Juice Moisturizing Cream",
+      brand: "Round Lab",
+      category: "Moisturizer",
+      dateOpened: "2025-12-05",
+      paoMonths: 6,
+      expirationDate: "2026-06-20", // Just expired based on our local date of 2026-06-23
+      volumeLabel: "80ml",
+      notes:
+        "Deep birch sap hydration locks skin moisture. Essential daily defense barrier.",
+    },
+    {
+      id: "6",
+      name: "Heartleaf 77% Soothing Toner",
+      brand: "Anua",
+      category: "Toner",
+      dateOpened: "2026-05-20",
+      paoMonths: 12,
+      expirationDate: "2027-04-18",
+      volumeLabel: "250ml",
+      notes:
+        "Extremely calming on red or irritated skin. Excellent for 7-skin method.",
+    },
+  ];
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <header className="sticky top-0 z-30 bg-[#FCFAF6]/90 backdrop-blur-md border-b border-emerald-950/5 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between py-4">
+            <div className="flex items-center gap-3">
+              <div className="w-5 h-5 rounded-full bg-[#10b981] flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-[#FCFAF6]" />
+              </div>
+
+              <span className="font-serif uppercase text-xl font-bold tracking-wider text-emerald-950">
+                Skinventory
+              </span>
+            </div>
+
+            <button className="px-4 py-2 bg-[#10b981] text-white font-bold rounded-full hover:bg-[#0fa55b] cursor-pointer transition-all text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-[0_4px_14px_rgba(16,185,129,0.3)] hover:shadow-[0_4px_18px_rgba(16,185,129,0.5)] active:scale-95 duration-150">
+              Add Items
+            </button>
+          </div>
+          <div className="h-px bg-emerald-950/5" />
+
+          <nav className="flex items-center gap-6 py-3 text-[11px] uppercase tracking-[0.15em] text-stone-500 font-semibold">
+            <span className="relative cursor-pointer text-stone-500 hover:text-[#10b981] transition-colors group">
+              My Inventory
+              <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-[#10b981] transition-all duration-300 group-hover:w-full"></span>
+            </span>
+
+            <span className="text-stone-300">|</span>
+
+            <span className="relative cursor-pointer text-stone-500 hover:text-[#10b981] transition-colors group">
+              Routine Planner
+              <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-[#10b981] transition-all duration-300 group-hover:w-full"></span>
+            </span>
+
+            <span className="text-stone-300">|</span>
+
+            <span className="relative cursor-pointer text-stone-500 hover:text-[#10b981] transition-colors group">
+              Skincare Tips
+              <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-[#10b981] transition-all duration-300 group-hover:w-full"></span>
+            </span>
+          </nav>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      </header>
+
+      <main className="px-4 py-8 sm:px-6 lg:px-8 gap-8 grid grid-cols-1">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
+            <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
+              Total Curated
+            </span>
+            <div className="flex items-baseline gap-1.5 mt-2">
+              <span className="text-2xl font-serif font-bold text-stone-900">
+                10
+              </span>
+              <span className="text-[11px] text-stone-400 font-light">
+                Products
+              </span>
+            </div>
+          </div>
+          <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
+            <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
+              Expired / Inactive
+            </span>
+            <div className="flex items-baseline gap-1.5 mt-2">
+              <span className="text-2xl font-serif font-bold text-stone-900">
+                2
+              </span>
+              <span className="text-[11px] text-stone-400 font-light">
+                Products
+              </span>
+            </div>
+          </div>
+          <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
+            <span className="text-[10px] uppercase font-bold text-red-400 tracking-widest">
+              Expiring Soon
+            </span>
+            <div className="flex items-baseline gap-1.5 mt-2">
+              <span className="text-2xl font-serif font-bold text-stone-900">
+                3
+              </span>
+              <span className="text-[11px] text-stone-400 font-light">
+                Formulas
+              </span>
+            </div>
+          </div>
+          <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
+            <span className="text-[10px] uppercase font-bold text-green-500 tracking-widest">
+              Active / In Use
+            </span>
+            <div className="flex items-baseline gap-1.5 mt-2">
+              <span className="text-2xl font-serif font-bold text-stone-900">
+                5
+              </span>
+              <span className="text-[11px] text-stone-400 font-light">
+                Products
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-6">
+          <div>
+            <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest mb-2 block">
+              Search for a product
+            </span>
+            <Search className="w-4 h-4 text-stone-400 absolute left-4 top-3.5" />
+            <input
+              id="search-input"
+              type="text"
+              placeholder="Ex. beauty of joseon, bha, retinol serum..."
+              // value={searchQuery}
+              // onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-11 pr-5 py-3 bg-white border border-stone-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:border-[#10b981] transition-all placeholder:text-stone-400/80 shadow-[0_4px_12px_rgba(0,0,0,0.01)]"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+            <div className="flex flex-col gap-6 mt-6">
+              <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
+                Product Expiring Soon!
+              </span>
+              <div className="bg-[#fef3f2] border border-red-200/50 p-4 rounded-2xl flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center">
+                    <Bell className="w-6 h-6 text-red-400" />
+                  </div>
+                  {/* <div className="w-5 h-5 rounded-full bg-red-400 flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-[#fef3f2]" />
+                  </div> */}
+                  <span className="text-sm font-serif font-medium text-stone-900 tracking-tight leading-relaxed">
+                    Birch Juice Moisturizing Cream is expiring soon! (Expires on
+                    2026-06-20)
+                  </span>
+                </div>
+                <button className="px-4 py-2 bg-red-400 text-white font-bold rounded-full hover:bg-red-500 cursor-pointer transition-all text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-[0_4px_14px_rgba(239,68,68,0.3)] hover:shadow-[0_4px_18px_rgba(239,68,68,0.5)] active:scale-95 duration-150">
+                  View Product
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between my-4 px-1">
+              <h3 className="font-serif text-lg tracking-wider text-emerald-950 font-bold">
+                My Skincare Cabinet Collection
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between w-full"
+                >
+                  <div className="min-w-0 flex-1">
+                    <span className="text-[10px] tracking-[0.15em] uppercase font-bold text-[#10b981] block mb-0.5">
+                      {product.brand}
+                    </span>
+                    <h4
+                      className="font-serif text-base font-medium text-stone-900 tracking-tight leading-relaxed"
+                      title={product.name}
+                    >
+                      {product.name}
+                    </h4>
+                  </div>
+
+                  <span
+                    className={`text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full ${
+                      product.category === "Cleanser"
+                        ? "bg-amber-50 text-amber-800"
+                        : product.category === "Toner"
+                          ? "bg-[#10b981]/15 text-[#10b981]"
+                          : product.category === "Serum"
+                            ? "bg-purple-100/50 text-purple-800"
+                            : product.category === "Moisturizer"
+                              ? "bg-[#10b981]/10 text-emerald-900"
+                              : product.category === "Sunscreen"
+                                ? "bg-emerald-800 text-white"
+                                : product.category === "Exfoliant"
+                                  ? "bg-red-50 text-red-800"
+                                  : "bg-stone-100 text-stone-700"
+                    }`}
+                  >
+                    {product.category}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            {/* <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
+              Filter by Category
+            </span>
+            <select
+              id="category-filter"
+              // value={selectedCategory}
+              // onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full pl-4 pr-5 py-3 bg-white border border-stone-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:border-[#10b981] transition-all placeholder:text-stone-400/80 shadow-[0_4px_12px_rgba(0,0,0,0.01)]"
+            >
+              <option value="">All Categories</option>
+              <option value="Cleanser">Cleanser</option>
+              <option value="Toner">Toner</option>
+              <option value="Serum">Serum</option>
+              <option value="Moisturizer">Moisturizer</option>
+              <option value="Sunscreen">Sunscreen</option>
+              <option value="Exfoliant">Exfoliant</option>
+            </select> */}
+          </div>
         </div>
+        {/* </div> */}
       </main>
-    </div>
+    </>
   );
 }
