@@ -1,4 +1,5 @@
 import { Bell, Search } from "lucide-react";
+import { SkincareProduct } from "./types";
 
 export default function Home() {
   const products = [
@@ -75,6 +76,25 @@ export default function Home() {
         "Extremely calming on red or irritated skin. Excellent for 7-skin method.",
     },
   ];
+
+  const getProductExpirationStatus = (product: SkincareProduct) => {
+    const currentDate = new Date();
+    const expirationDate = new Date(product.expirationDate || "");
+    const daysRemaining = Math.ceil(
+      (expirationDate.getTime() - currentDate.getTime()) /
+        (1000 * 60 * 60 * 24),
+    );
+    let status = "Unknown";
+    if (daysRemaining < 0) {
+      status = "Expired";
+    } else if (daysRemaining <= 7) {
+      status = "Expiring Soon";
+    } else {
+      status = "Active";
+    }
+    return { daysRemaining, status };
+  };
+
   return (
     <>
       <header className="sticky top-0 z-30 bg-[#FCFAF6]/90 backdrop-blur-md border-b border-emerald-950/5 px-4 sm:px-6 lg:px-8">
@@ -120,6 +140,22 @@ export default function Home() {
       </header>
 
       <main className="px-4 py-8 sm:px-6 lg:px-8 gap-8 grid grid-cols-1">
+        <div className="flex flex-col gap-6">
+          <div className="bg-[#fef3f2] border border-red-200/50 p-4 rounded-2xl flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center">
+                <Bell className="w-6 h-6 text-red-400" />
+              </div>
+              <span className="text-sm font-serif font-medium text-stone-900 tracking-tight leading-relaxed">
+                Birch Juice Moisturizing Cream is expiring soon! (Expires on
+                2026-06-20)
+              </span>
+            </div>
+            <button className="px-4 py-2 bg-red-400 text-white font-bold rounded-full hover:bg-red-500 cursor-pointer transition-all text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-[0_4px_14px_rgba(239,68,68,0.3)] hover:shadow-[0_4px_18px_rgba(239,68,68,0.5)] active:scale-95 duration-150">
+              View Product
+            </button>
+          </div>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
             <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
@@ -187,76 +223,141 @@ export default function Home() {
               placeholder="Ex. beauty of joseon, bha, retinol serum..."
               // value={searchQuery}
               // onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-5 py-3 bg-white border border-stone-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:border-[#10b981] transition-all placeholder:text-stone-400/80 shadow-[0_4px_12px_rgba(0,0,0,0.01)]"
+              className="w-full pl-8 pr-5 py-3 bg-white border border-stone-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:border-[#10b981] transition-all placeholder:text-stone-400/80 shadow-[0_4px_12px_rgba(0,0,0,0.01)]"
             />
-
-            <div className="flex flex-col gap-6 mt-6">
-              <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
-                Product Expiring Soon!
+            <div className="mt-5 flex flex-col gap-2">
+              <span className="text-[10px] uppercase tracking-widest font-bold text-stone-400">
+                Filter By Element
               </span>
-              <div className="bg-[#fef3f2] border border-red-200/50 p-4 rounded-2xl flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center">
-                    <Bell className="w-6 h-6 text-red-400" />
-                  </div>
-                  {/* <div className="w-5 h-5 rounded-full bg-red-400 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-[#fef3f2]" />
-                  </div> */}
-                  <span className="text-sm font-serif font-medium text-stone-900 tracking-tight leading-relaxed">
-                    Birch Juice Moisturizing Cream is expiring soon! (Expires on
-                    2026-06-20)
-                  </span>
-                </div>
-                <button className="px-4 py-2 bg-red-400 text-white font-bold rounded-full hover:bg-red-500 cursor-pointer transition-all text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-[0_4px_14px_rgba(239,68,68,0.3)] hover:shadow-[0_4px_18px_rgba(239,68,68,0.5)] active:scale-95 duration-150">
-                  View Product
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  // onClick={() => setCategoryFilter("All")}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400
+                  `}
+                >
+                  All ({products.length})
+                </button>
+                <button
+                  // onClick={() => setCategoryFilter("All")}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400
+                  `}
+                >
+                  Serum ({products.filter((p) => p.category === "Serum").length}
+                  )
+                </button>
+                <button
+                  // onClick={() => setCategoryFilter("All")}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400
+                  `}
+                >
+                  Sunscreen (
+                  {products.filter((p) => p.category === "Sunscreen").length})
+                </button>
+                <button
+                  // onClick={() => setCategoryFilter("All")}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400
+                  `}
+                >
+                  Toner ({products.filter((p) => p.category === "Toner").length}
+                  )
                 </button>
               </div>
             </div>
 
-            <div className="flex items-center justify-between my-4 px-1">
-              <h3 className="font-serif text-lg tracking-wider text-emerald-950 font-bold">
-                My Skincare Cabinet Collection
-              </h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between w-full"
-                >
-                  <div className="min-w-0 flex-1">
-                    <span className="text-[10px] tracking-[0.15em] uppercase font-bold text-[#10b981] block mb-0.5">
-                      {product.brand}
-                    </span>
-                    <h4
-                      className="font-serif text-base font-medium text-stone-900 tracking-tight leading-relaxed"
-                      title={product.name}
+            <div>
+              <div className="flex items-center justify-between my-4 px-1">
+                <h3 className="font-serif text-lg tracking-wider text-emerald-950 font-bold">
+                  My Skincare Cabinet Collection
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {products.map((product) => {
+                  const expirationStatus = getProductExpirationStatus(product);
+                  return (
+                    <div
+                      key={product.id}
+                      className="bg-white border border-stone-200/50 p-4 rounded-2xl"
                     >
-                      {product.name}
-                    </h4>
-                  </div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span
+                          className={`text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full ${
+                            product.category === "Cleanser"
+                              ? "bg-amber-50 text-amber-800"
+                              : product.category === "Toner"
+                                ? "bg-[#10b981]/15 text-[#10b981]"
+                                : product.category === "Serum"
+                                  ? "bg-purple-100/50 text-purple-800"
+                                  : product.category === "Moisturizer"
+                                    ? "bg-[#10b981]/10 text-emerald-900"
+                                    : product.category === "Sunscreen"
+                                      ? "bg-emerald-800 text-white"
+                                      : product.category === "Exfoliant"
+                                        ? "bg-red-50 text-red-800"
+                                        : "bg-stone-100 text-stone-700"
+                          }`}
+                        >
+                          {product.category}
+                        </span>
+                        <span className="text-[10px] tracking-[0.15em] uppercase font-bold text-[#10b981] block mb-0.5">
+                          {product.brand}
+                        </span>
+                      </div>
 
-                  <span
-                    className={`text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full ${
-                      product.category === "Cleanser"
-                        ? "bg-amber-50 text-amber-800"
-                        : product.category === "Toner"
-                          ? "bg-[#10b981]/15 text-[#10b981]"
-                          : product.category === "Serum"
-                            ? "bg-purple-100/50 text-purple-800"
-                            : product.category === "Moisturizer"
-                              ? "bg-[#10b981]/10 text-emerald-900"
-                              : product.category === "Sunscreen"
-                                ? "bg-emerald-800 text-white"
-                                : product.category === "Exfoliant"
-                                  ? "bg-red-50 text-red-800"
+                      <div className="flex flex-col">
+                        <h4
+                          className="font-serif text-base font-medium text-stone-900 tracking-tight leading-relaxed"
+                          title={product.name}
+                        >
+                          {product.name}
+                        </h4>
+                        {/* <p className="text-sm text-stone-500 mt-1">
+                        {product.notes}
+                      </p> */}
+                        <div
+                          className={`p-2.5 rounded-xl flex items-center justify-between text-xs ${
+                            expirationStatus.status === "Expired"
+                              ? "bg-rose-50 text-rose-800"
+                              : expirationStatus.status === "Expiring Soon"
+                                ? "bg-amber-50 text-amber-800"
+                                : expirationStatus.status === "Active"
+                                  ? "bg-[#10b981]/10 text-[#10b981]"
                                   : "bg-stone-100 text-stone-700"
-                    }`}
-                  >
-                    {product.category}
-                  </span>
-                </div>
-              ))}
+                          } mt-3`}
+                        >
+                          <div className="flex items-center gap-1.5 font-semibold">
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full ${
+                                expirationStatus.status === "Expired"
+                                  ? "bg-rose-500"
+                                  : expirationStatus.status === "Expiring Soon"
+                                    ? "bg-amber-500"
+                                    : "bg-[#10b981]"
+                              }`}
+                            />
+                            <span>
+                              {expirationStatus.status === "Expired" &&
+                                "Expired Formula"}
+                              {expirationStatus.status === "Expiring Soon" &&
+                                "Expires Soon"}
+                              {expirationStatus.status === "Active" &&
+                                "Active & Serene"}
+                              {expirationStatus.status === "Unknown" &&
+                                "No Limit Detected"}
+                            </span>
+                          </div>
+                          <span className="font-mono text-xs font-bold">
+                            {expirationStatus.daysRemaining === Infinity
+                              ? "N/A"
+                              : expirationStatus.daysRemaining < 0
+                                ? `${Math.abs(expirationStatus.daysRemaining)}d ago`
+                                : `${expirationStatus.daysRemaining}d left`}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
           <div>
