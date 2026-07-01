@@ -1,7 +1,10 @@
+"use client";
 import { Bell, Search } from "lucide-react";
 import { SkincareProduct } from "./types";
+import { useState } from "react";
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const products = [
     {
       id: "1",
@@ -75,6 +78,18 @@ export default function Home() {
       notes:
         "Extremely calming on red or irritated skin. Excellent for 7-skin method.",
     },
+    {
+      id: "7",
+      name: "Hyaluronic Acid Fresh Sun Serum [SPF50+/PA++++]",
+      brand: "Isntree",
+      category: "Sunscreen",
+      dateOpened: "2024-11-20",
+      paoMonths: 12,
+      expirationDate: "2026-04-18",
+      volumeLabel: "100ml",
+      notes:
+        "Lightweight hydrating sunscreen. Excellent for sensitive skin. No white cast.",
+    },
   ];
 
   const getProductExpirationStatus = (product: SkincareProduct) => {
@@ -94,6 +109,18 @@ export default function Home() {
     }
     return { daysRemaining, status };
   };
+
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
+  });
+
+  // const criticalNotifications = products.map(p =>{
+
+  // })
 
   return (
     <>
@@ -146,10 +173,7 @@ export default function Home() {
               <div className="flex items-center justify-center">
                 <Bell className="w-6 h-6 text-red-400" />
               </div>
-              <span className="text-sm font-serif font-medium text-stone-900 tracking-tight leading-relaxed">
-                Birch Juice Moisturizing Cream is expiring soon! (Expires on
-                2026-06-20)
-              </span>
+              <span className="text-sm font-serif font-medium text-stone-900 tracking-tight leading-relaxed"></span>
             </div>
             <button className="px-4 py-2 bg-red-400 text-white font-bold rounded-full hover:bg-red-500 cursor-pointer transition-all text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-[0_4px_14px_rgba(239,68,68,0.3)] hover:shadow-[0_4px_18px_rgba(239,68,68,0.5)] active:scale-95 duration-150">
               View Product
@@ -221,8 +245,8 @@ export default function Home() {
               id="search-input"
               type="text"
               placeholder="Ex. beauty of joseon, bha, retinol serum..."
-              // value={searchQuery}
-              // onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-8 pr-5 py-3 bg-white border border-stone-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:border-[#10b981] transition-all placeholder:text-stone-400/80 shadow-[0_4px_12px_rgba(0,0,0,0.01)]"
             />
             <div className="mt-5 flex flex-col gap-2">
@@ -271,7 +295,7 @@ export default function Home() {
                 </h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {products.map((product) => {
+                {filteredProducts.map((product) => {
                   const expirationStatus = getProductExpirationStatus(product);
                   return (
                     <div
@@ -361,23 +385,10 @@ export default function Home() {
             </div>
           </div>
           <div>
-            {/* <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
-              Filter by Category
+            <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest mb-2 block">
+              Routine Suggestion
             </span>
-            <select
-              id="category-filter"
-              // value={selectedCategory}
-              // onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full pl-4 pr-5 py-3 bg-white border border-stone-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:border-[#10b981] transition-all placeholder:text-stone-400/80 shadow-[0_4px_12px_rgba(0,0,0,0.01)]"
-            >
-              <option value="">All Categories</option>
-              <option value="Cleanser">Cleanser</option>
-              <option value="Toner">Toner</option>
-              <option value="Serum">Serum</option>
-              <option value="Moisturizer">Moisturizer</option>
-              <option value="Sunscreen">Sunscreen</option>
-              <option value="Exfoliant">Exfoliant</option>
-            </select> */}
+            <div className="bg-white border border-stone-200/50 p-4 rounded-2xl"></div>
           </div>
         </div>
         {/* </div> */}
