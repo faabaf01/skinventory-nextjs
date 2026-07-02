@@ -2,6 +2,7 @@
 import { Bell, Search } from "lucide-react";
 import { SkincareProduct } from "./types";
 import { useState } from "react";
+import { get } from "http";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -37,7 +38,7 @@ export default function Home() {
       category: "Serum",
       dateOpened: "2025-11-20",
       paoMonths: 9,
-      expirationDate: "2026-08-15",
+      expirationDate: "2026-07-15",
       volumeLabel: "30ml",
       notes:
         "Vibrant honey-like essence. Keeps skin radiant, honey glow finish.",
@@ -49,7 +50,7 @@ export default function Home() {
       category: "Sunscreen",
       dateOpened: "2026-05-10",
       paoMonths: 6,
-      expirationDate: "2027-01-12",
+      expirationDate: "2026-07-23",
       volumeLabel: "50ml",
       notes:
         "Organic lightweight physical sunscreen. Absolutely zero white cast. Outstanding UV defence.",
@@ -102,7 +103,7 @@ export default function Home() {
     let status = "Unknown";
     if (daysRemaining < 0) {
       status = "Expired";
-    } else if (daysRemaining <= 7) {
+    } else if (daysRemaining <= 21) {
       status = "Expiring Soon";
     } else {
       status = "Active";
@@ -118,7 +119,33 @@ export default function Home() {
     return matchesSearch;
   });
 
-  // const criticalNotifications = products.map(p =>{
+  // Notifications logic
+  const criticalNotifications = products
+    .map((p) => ({
+      product: p,
+      details: getProductExpirationStatus(p),
+    }))
+    .filter(
+      (item) =>
+        item.details.status === "Expired" ||
+        item.details.status === "Expiring Soon",
+    );
+
+  const expiredProducts = criticalNotifications.filter(
+    (item) => item.details.status === "Expired",
+  );
+  const expiringSoonProducts = criticalNotifications.filter(
+    (item) => item.details.status === "Expiring Soon",
+  );
+  const activeProducts = products.filter(
+    (p) => getProductExpirationStatus(p).status === "Active",
+  );
+  // const expiredCount = criticalNotifications.filter(
+  //   (item) => item.details.status === "Expired",
+  // ).length;
+  // const soonCount = criticalNotifications.filter(item => item.details.status === "Expiring Soon").length;
+
+  // const criticalNotifications = products.map(p => {
 
   // })
 
@@ -167,19 +194,6 @@ export default function Home() {
       </header>
 
       <main className="px-4 py-8 sm:px-6 lg:px-8 gap-8 grid grid-cols-1">
-        <div className="flex flex-col gap-6">
-          <div className="bg-[#fef3f2] border border-red-200/50 p-4 rounded-2xl flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center">
-                <Bell className="w-6 h-6 text-red-400" />
-              </div>
-              <span className="text-sm font-serif font-medium text-stone-900 tracking-tight leading-relaxed"></span>
-            </div>
-            <button className="px-4 py-2 bg-red-400 text-white font-bold rounded-full hover:bg-red-500 cursor-pointer transition-all text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-[0_4px_14px_rgba(239,68,68,0.3)] hover:shadow-[0_4px_18px_rgba(239,68,68,0.5)] active:scale-95 duration-150">
-              View Product
-            </button>
-          </div>
-        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
             <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
@@ -187,20 +201,7 @@ export default function Home() {
             </span>
             <div className="flex items-baseline gap-1.5 mt-2">
               <span className="text-2xl font-serif font-bold text-stone-900">
-                10
-              </span>
-              <span className="text-[11px] text-stone-400 font-light">
-                Products
-              </span>
-            </div>
-          </div>
-          <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
-            <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
-              Expired / Inactive
-            </span>
-            <div className="flex items-baseline gap-1.5 mt-2">
-              <span className="text-2xl font-serif font-bold text-stone-900">
-                2
+                {products.length}
               </span>
               <span className="text-[11px] text-stone-400 font-light">
                 Products
@@ -209,11 +210,24 @@ export default function Home() {
           </div>
           <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
             <span className="text-[10px] uppercase font-bold text-red-400 tracking-widest">
+              Expired / Inactive
+            </span>
+            <div className="flex items-baseline gap-1.5 mt-2">
+              <span className="text-2xl font-serif font-bold text-stone-900">
+                {expiredProducts.length}
+              </span>
+              <span className="text-[11px] text-stone-400 font-light">
+                Products
+              </span>
+            </div>
+          </div>
+          <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
+            <span className="text-[10px] uppercase font-bold text-amber-400 tracking-widest">
               Expiring Soon
             </span>
             <div className="flex items-baseline gap-1.5 mt-2">
               <span className="text-2xl font-serif font-bold text-stone-900">
-                3
+                {expiringSoonProducts.length}
               </span>
               <span className="text-[11px] text-stone-400 font-light">
                 Formulas
@@ -226,7 +240,7 @@ export default function Home() {
             </span>
             <div className="flex items-baseline gap-1.5 mt-2">
               <span className="text-2xl font-serif font-bold text-stone-900">
-                5
+                {activeProducts.length}
               </span>
               <span className="text-[11px] text-stone-400 font-light">
                 Products
@@ -234,6 +248,42 @@ export default function Home() {
             </div>
           </div>
         </div>
+        {/* <div className="flex flex-col gap-6">
+          {criticalNotifications.map(({ product, details }) => (
+            <div
+              key={product.id}
+              className={`p-3 rounded-xl border flex items-center justify-between gap-3 ${
+                details.status === "Expired"
+                  ? "bg-rose-50/40 border-rose-100"
+                  : "bg-amber-50/40 border-amber-100"
+              }`}
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div
+                  className={`w-2 h-2 rounded-full shrink-0 ${details.status === "Expired" ? "bg-rose-500" : "bg-amber-500"}`}
+                />
+                <div className="text-xs truncate">
+                  <span className="font-bold text-stone-900">
+                    {product.brand}
+                  </span>
+                  <span className="text-stone-400 mx-1">•</span>
+                  <span className="text-stone-700">{product.name}</span>
+                </div>
+              </div>
+              <span
+                className={`text-[11px] font-mono font-bold whitespace-nowrap px-2.5 py-0.5 rounded-full ${
+                  details.status === "Expired"
+                    ? "bg-rose-100 text-rose-700"
+                    : "bg-amber-100 text-amber-700"
+                }`}
+              >
+                {details.status === "Expired"
+                  ? "Expired Formula"
+                  : `${details.daysRemaining}d left`}
+              </span>
+            </div>
+          ))}
+        </div> */}
 
         <div className="grid grid-cols-2 gap-6">
           <div>
