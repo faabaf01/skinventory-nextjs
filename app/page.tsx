@@ -1,11 +1,12 @@
 "use client";
-import { Bell, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { SkincareProduct } from "./types";
 import { useState } from "react";
-import { get } from "http";
+
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("All");
   const products = [
     {
       id: "1",
@@ -116,7 +117,9 @@ export default function Home() {
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.category.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
+    const matchesCategory =
+      categoryFilter === "All" || product.category === categoryFilter;
+    return matchesSearch && matchesCategory;
   });
 
   // Notifications logic
@@ -148,6 +151,17 @@ export default function Home() {
   // const criticalNotifications = products.map(p => {
 
   // })
+   const categories: string[] = [
+     "Cleanser",
+     "Toner",
+     "Serum",
+     "Moisturizer",
+     "Sunscreen",
+     "Exfoliant",
+     "Mask",
+     "Makeup",
+     "Other",
+   ];
 
   return (
     <>
@@ -305,43 +319,74 @@ export default function Home() {
               </span>
               <div className="flex flex-wrap items-center gap-1.5">
                 <button
-                  // onClick={() => setCategoryFilter("All")}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400
-                  `}
+                  onClick={() => setCategoryFilter("All")}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer ${
+                    categoryFilter === "All"
+                      ? "bg-stone-900 text-[#FCFAF6] shadow-sm"
+                      : "bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400"
+                  }`}
                 >
                   All ({products.length})
                 </button>
-                <button
-                  // onClick={() => setCategoryFilter("All")}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400
-                  `}
+                {categories.map((cat) => {
+                  const count = products.filter(
+                    (p) => p.category === cat,
+                  ).length;
+                  if (count === 0 && categoryFilter !== cat) return null; // Skip rendering if no products in this category
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setCategoryFilter(cat)}
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer ${
+                        categoryFilter === cat
+                          ? "bg-stone-900 text-[#FCFAF6] shadow-sm"
+                          : "bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400"
+                      }`}
+                    >
+                      {cat} ({count})
+                    </button>
+                  );
+                })}
+                {/* <button
+                  onClick={() => setCategoryFilter("Serum")}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer ${
+                    categoryFilter === "Serum"
+                      ? "bg-stone-900 text-[#FCFAF6] shadow-sm"
+                      : "bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400"
+                  }`}
                 >
                   Serum ({products.filter((p) => p.category === "Serum").length}
                   )
                 </button>
                 <button
-                  // onClick={() => setCategoryFilter("All")}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400
-                  `}
+                  onClick={() => setCategoryFilter("Sunscreen")}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer ${
+                    categoryFilter === "Sunscreen"
+                      ? "bg-stone-900 text-[#FCFAF6] shadow-sm"
+                      : "bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400"
+                  }`}
                 >
                   Sunscreen (
                   {products.filter((p) => p.category === "Sunscreen").length})
                 </button>
                 <button
-                  // onClick={() => setCategoryFilter("All")}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400
-                  `}
+                  onClick={() => setCategoryFilter("Toner")}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer ${
+                    categoryFilter === "Toner"
+                      ? "bg-stone-900 text-[#FCFAF6] shadow-sm"
+                      : "bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400"
+                  }`}
                 >
                   Toner ({products.filter((p) => p.category === "Toner").length}
                   )
-                </button>
+                </button> */}
               </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between my-4 px-1">
                 <h3 className="font-serif text-lg tracking-wider text-emerald-950 font-bold">
-                  My Skincare Cabinet Collection
+                  My Skincare Collection
                 </h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -354,20 +399,8 @@ export default function Home() {
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span
-                          className={`text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full ${
-                            product.category === "Cleanser"
-                              ? "bg-amber-50 text-amber-800"
-                              : product.category === "Toner"
-                                ? "bg-[#10b981]/15 text-[#10b981]"
-                                : product.category === "Serum"
-                                  ? "bg-purple-100/50 text-purple-800"
-                                  : product.category === "Moisturizer"
-                                    ? "bg-[#10b981]/10 text-emerald-900"
-                                    : product.category === "Sunscreen"
-                                      ? "bg-emerald-800 text-white"
-                                      : product.category === "Exfoliant"
-                                        ? "bg-red-50 text-red-800"
-                                        : "bg-stone-100 text-stone-700"
+                          className={`text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full
+                            bg-[#10b981]/10 text-emerald-900
                           }`}
                         >
                           {product.category}
