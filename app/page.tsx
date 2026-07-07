@@ -1,13 +1,13 @@
 "use client";
 import { Search } from "lucide-react";
-import { SkincareProduct } from "./types";
+import { ExpiringSoonProduct, SkincareProduct } from "./types";
 import { useState } from "react";
-
+import StatusCard from "./components/statusCard";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [categoryFilter, setCategoryFilter] = useState<string>("All");
-  const products = [
+  const products: SkincareProduct[] = [
     {
       id: "1",
       name: "AHA-BHA Clarifying Treatment Toner",
@@ -134,13 +134,14 @@ export default function Home() {
         item.details.status === "Expiring Soon",
     );
 
-  const expiredProducts = criticalNotifications.filter(
+  const expiredProducts: ExpiringSoonProduct[] = criticalNotifications.filter(
     (item) => item.details.status === "Expired",
   );
-  const expiringSoonProducts = criticalNotifications.filter(
-    (item) => item.details.status === "Expiring Soon",
-  );
-  const activeProducts = products.filter(
+  const expiringSoonProducts: ExpiringSoonProduct[] =
+    criticalNotifications.filter(
+      (item) => item.details.status === "Expiring Soon",
+    );
+  const activeProducts: SkincareProduct[] = products.filter(
     (p) => getProductExpirationStatus(p).status === "Active",
   );
   // const expiredCount = criticalNotifications.filter(
@@ -209,7 +210,17 @@ export default function Home() {
 
       <main className="px-4 py-8 sm:px-6 lg:px-8 gap-8 grid grid-cols-1">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
+          <StatusCard
+            products={products}
+            title="Total Curated"
+            color="text-stone-400"
+          />
+          <StatusCard
+            products={expiredProducts}
+            title="Expired / Inactive"
+            color="text-red-400"
+          />
+          {/* <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
             <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
               Total Curated
             </span>
@@ -221,21 +232,28 @@ export default function Home() {
                 Products
               </span>
             </div>
-          </div>
-          <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
-            <span className="text-[10px] uppercase font-bold text-red-400 tracking-widest">
-              Expired / Inactive
-            </span>
-            <div className="flex items-baseline gap-1.5 mt-2">
+          </div> */}
+          <StatusCard
+            products={expiringSoonProducts}
+            title="Expiring Soon"
+            color="text-amber-400"
+          />
+          <StatusCard
+            products={activeProducts}
+            title="Active / In Use"
+            color="text-green-500"
+          />
+        </div>
+        {/* <div className="flex items-baseline gap-1.5 mt-2">
               <span className="text-2xl font-serif font-bold text-stone-900">
                 {expiredProducts.length}
               </span>
               <span className="text-[11px] text-stone-400 font-light">
                 Products
               </span>
-            </div>
-          </div>
-          <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
+            </div> */}
+        {/* </div> */}
+        {/* <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
             <span className="text-[10px] uppercase font-bold text-amber-400 tracking-widest">
               Expiring Soon
             </span>
@@ -260,8 +278,8 @@ export default function Home() {
                 Products
               </span>
             </div>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
         {/* <div className="flex flex-col gap-6">
           {criticalNotifications.map(({ product, details }) => (
             <div

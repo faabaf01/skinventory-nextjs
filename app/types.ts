@@ -1,4 +1,4 @@
-export interface SkincareProduct {
+export type SkincareProduct = {
   id: string;
   name: string;
   brand: string;
@@ -8,4 +8,12 @@ export interface SkincareProduct {
   expirationDate?: string; // YYYY-MM-DD static date
   notes?: string;
   volumeLabel?: string; // E.g., '50ml', '1.7 fl oz'
-}
+};
+
+export type ExpiringSoonProduct = {
+  product: SkincareProduct;
+  details: {
+    daysRemaining: number;
+    status: string;
+  };
+};
