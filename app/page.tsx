@@ -1,11 +1,12 @@
 "use client";
-import { Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { ExpiringSoonProduct, SkincareProduct } from "./types";
 import { useState } from "react";
 import StatusCard from "./components/statusCard";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [categoryFilter, setCategoryFilter] = useState<string>("All");
   const products: SkincareProduct[] = [
     {
@@ -91,6 +92,18 @@ export default function Home() {
       volumeLabel: "100ml",
       notes:
         "Lightweight hydrating sunscreen. Excellent for sensitive skin. No white cast.",
+    },
+    {
+      id: "8",
+      name: "Gentle Chemical Exfoliant : BHA 2% + PHA 5%",
+      brand: "Isntree",
+      category: "Exfoliant",
+      dateOpened: "2025-11-20",
+      paoMonths: 12,
+      expirationDate: "2027-04-18",
+      volumeLabel: "100ml",
+      notes:
+        "Gentle chemical exfoliant. Excellent for sensitive skin. No irritation.",
     },
   ];
 
@@ -179,7 +192,11 @@ export default function Home() {
               </span>
             </div>
 
-            <button className="px-4 py-2 bg-[#10b981] text-white font-bold rounded-full hover:bg-[#0fa55b] cursor-pointer transition-all text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-[0_4px_14px_rgba(16,185,129,0.3)] hover:shadow-[0_4px_18px_rgba(16,185,129,0.5)] active:scale-95 duration-150">
+            <button
+              className="px-4 py-2 bg-[#10b981] text-white font-bold rounded-full hover:bg-[#0fa55b] cursor-pointer transition-all text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-[0_4px_14px_rgba(16,185,129,0.3)] hover:shadow-[0_4px_18px_rgba(16,185,129,0.5)] active:scale-95 duration-150"
+              onClick={() => setShowAddForm(true)}
+            >
+              <Plus className="w-3 h-3" />
               Add Items
             </button>
           </div>
@@ -220,19 +237,6 @@ export default function Home() {
             title="Expired / Inactive"
             color="text-red-400"
           />
-          {/* <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
-            <span className="text-[10px] uppercase font-bold text-stone-400 tracking-widest">
-              Total Curated
-            </span>
-            <div className="flex items-baseline gap-1.5 mt-2">
-              <span className="text-2xl font-serif font-bold text-stone-900">
-                {products.length}
-              </span>
-              <span className="text-[11px] text-stone-400 font-light">
-                Products
-              </span>
-            </div>
-          </div> */}
           <StatusCard
             products={expiringSoonProducts}
             title="Expiring Soon"
@@ -244,42 +248,6 @@ export default function Home() {
             color="text-green-500"
           />
         </div>
-        {/* <div className="flex items-baseline gap-1.5 mt-2">
-              <span className="text-2xl font-serif font-bold text-stone-900">
-                {expiredProducts.length}
-              </span>
-              <span className="text-[11px] text-stone-400 font-light">
-                Products
-              </span>
-            </div> */}
-        {/* </div> */}
-        {/* <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
-            <span className="text-[10px] uppercase font-bold text-amber-400 tracking-widest">
-              Expiring Soon
-            </span>
-            <div className="flex items-baseline gap-1.5 mt-2">
-              <span className="text-2xl font-serif font-bold text-stone-900">
-                {expiringSoonProducts.length}
-              </span>
-              <span className="text-[11px] text-stone-400 font-light">
-                Formulas
-              </span>
-            </div>
-          </div>
-          <div className="bg-white border border-stone-200/50 p-4 rounded-2xl flex flex-col justify-between">
-            <span className="text-[10px] uppercase font-bold text-green-500 tracking-widest">
-              Active / In Use
-            </span>
-            <div className="flex items-baseline gap-1.5 mt-2">
-              <span className="text-2xl font-serif font-bold text-stone-900">
-                {activeProducts.length}
-              </span>
-              <span className="text-[11px] text-stone-400 font-light">
-                Products
-              </span>
-            </div>
-          </div> */}
-        {/* </div> */}
         {/* <div className="flex flex-col gap-6">
           {criticalNotifications.map(({ product, details }) => (
             <div
@@ -365,39 +333,6 @@ export default function Home() {
                     </button>
                   );
                 })}
-                {/* <button
-                  onClick={() => setCategoryFilter("Serum")}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer ${
-                    categoryFilter === "Serum"
-                      ? "bg-stone-900 text-[#FCFAF6] shadow-sm"
-                      : "bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400"
-                  }`}
-                >
-                  Serum ({products.filter((p) => p.category === "Serum").length}
-                  )
-                </button>
-                <button
-                  onClick={() => setCategoryFilter("Sunscreen")}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer ${
-                    categoryFilter === "Sunscreen"
-                      ? "bg-stone-900 text-[#FCFAF6] shadow-sm"
-                      : "bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400"
-                  }`}
-                >
-                  Sunscreen (
-                  {products.filter((p) => p.category === "Sunscreen").length})
-                </button>
-                <button
-                  onClick={() => setCategoryFilter("Toner")}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all cursor-pointer ${
-                    categoryFilter === "Toner"
-                      ? "bg-stone-900 text-[#FCFAF6] shadow-sm"
-                      : "bg-white text-stone-500 border border-stone-200/60 hover:border-stone-400"
-                  }`}
-                >
-                  Toner ({products.filter((p) => p.category === "Toner").length}
-                  )
-                </button> */}
               </div>
             </div>
 
@@ -435,9 +370,7 @@ export default function Home() {
                         >
                           {product.name}
                         </h4>
-                        {/* <p className="text-sm text-stone-500 mt-1">
-                        {product.notes}
-                      </p> */}
+
                         <div
                           className={`p-2.5 rounded-xl flex items-center justify-between text-xs ${
                             expirationStatus.status === "Expired"
@@ -492,8 +425,22 @@ export default function Home() {
             <div className="bg-white border border-stone-200/50 p-4 rounded-2xl"></div>
           </div>
         </div>
-        {/* </div> */}
       </main>
+
+      <footer className="bg-stone-100 border-t border-stone-200/50 mt-16 py-12">
+        <div className="max-w-7xl mx-auto px-4 text-center sm:px-6 lg:px-8 space-y-3">
+          <p className="text-xs text-stone-400 max-w-xl mx-auto leading-relaxed">
+            Skinventory • Shelf Care and routine suggestion modules are designed
+            to assist with personal cosmetics curation. Always consult a
+            certified dermatologist for specific personal acne or health
+            guidelines.
+          </p>
+          <p className="text-[10px] text-stone-400/90 tracking-widest uppercase font-mono">
+            Pure Serene Beauty &copy; 2026. Made with Google AI Studio and
+            NextJS.
+          </p>
+        </div>
+      </footer>
     </>
   );
 }
