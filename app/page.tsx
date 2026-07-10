@@ -1,5 +1,5 @@
 "use client";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, X } from "lucide-react";
 import { ExpiringSoonProduct, SkincareProduct } from "./types";
 import { useState } from "react";
 import StatusCard from "./components/statusCard";
@@ -426,6 +426,19 @@ export default function Home() {
           </div>
         </div>
       </main>
+      {showAddForm && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <button
+            className="absolute cursor-pointer top-4 right-4 text-white text-xl font-bold"
+            onClick={() => setShowAddForm(false)}
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md relative">
+            Hello, this is the add form modal. You can implement your form here.
+          </div>
+        </div>
+      )}
 
       <footer className="bg-stone-100 border-t border-stone-200/50 mt-16 py-12">
         <div className="max-w-7xl mx-auto px-4 text-center sm:px-6 lg:px-8 space-y-3">
